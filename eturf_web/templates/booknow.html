@@ -1,0 +1,95 @@
+{% extends 'eturf_index.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="hero overlay" style="background-image: url({% static 'eturfstatic/images/bg_3.jpg' %});">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-9 mx-auto text-center">
+            <h1 class="text-white">Book Now</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            {% for i in data %}
+            
+            <h2>{{i.ground}} - Rs. {{i.price}}</h2>
+
+            <form action="{% url 'bookdata' %}" method="post">
+              {% csrf_token %}
+              <div class="form-group">
+                <input type="hidden" name="userid" value="{{request.session.userid}}"> 
+                <input type="hidden" value="{{i.ground}}" name="ground">
+                <input type="hidden" value="{{i.price}}" name="price">
+               
+              </div>
+              <div class="form-group">
+                <input type="date" class="form-control" name="date">
+              </div>
+              <div class="form-group">
+               <select name="start_time">
+                 <option value="">Start time</option>
+                 <option value="15:00:00">3:00 PM</option>
+                 <option value="16:00:00">4:00 PM</option>
+                 <option value="17:00:00">5:00 PM</option>
+               </select>
+               <select name="end_time">
+                <option value="">End Time</option>
+                <option value="16:00:00">4:00 PM</option>
+                <option value="17:00:00">5:00 PM</option>
+                <option value="18:00:00">6:00 PM</option>
+              </select>
+              </div>
+              {% if 'username_u' in request.session %}
+              <div class="form-group">
+                <input type="submit" class="btn btn-primary py-3 px-5" value="Book Now">
+              </div>
+              {% else %}
+              <div class="form-group">
+               <p>Please Login to book you turf</p>
+              </div>
+              {% endif %}
+            </form> 
+            
+            {% endfor %} 
+          </div>
+          <div class="col-lg-4 ml-auto">
+            
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <strong class="text-white d-block">Address</strong>
+                273 South Riverview Rd. <br> New York, NY 10011
+              </li>
+              <li class="mb-2">
+                <strong class="text-white d-block">Email</strong>
+                <a href="#">info@unslate.co</a>
+              </li>
+              <li class="mb-2">
+                <strong class="text-white d-block">
+                  Phone
+                </strong>
+                <a href="#">+12 345 6789 012</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  {% if messages %}
+
+  {% for message in messages %}
+  <script>alert("{{ message }}")</script> 
+  {% endfor %}
+
+  {% endif %}
+
+{% endblock %}
